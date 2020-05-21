@@ -36,7 +36,7 @@ if nargin == 0
         case 1
             % Set 1: TYPICAL
             kw = 0.8;   % Recommended RBF kernel width
-            Lambda = Inf;    % Recommended box constraint
+            Lambda = inf;    % Recommended box constraint
             x = [4,5,2,2,4,9,7,8,8,9;
                 7,8,2,5,5,2,1,1,5,4]';
             y = [1 1 1 1 1 -1 -1 -1 -1 -1]';
@@ -44,7 +44,7 @@ if nargin == 0
         case 2
             % Set 2: SADDLE
             kw = 1;     % Recommended RBF kernel width
-            Lambda = Inf;    % Recommended box constraint
+            Lambda = inf;    % Recommended box constraint
             x = [4,4,2,3,8,9,7,7,5,4,6,5,8,9,6,7;
                 4,6,6,3,2,3,2,0,1,0,1,2,7,8,7,5]';
             y = [1 1 1 1 1 1 1 1 -1 -1 -1 -1 -1 -1 -1 -1]';
@@ -69,7 +69,7 @@ if nargin == 0
         case 5
             % Set 5: SPIRAL
             kw = 0.2;   % Recommended RBF kernel width
-            Lambda = Inf;    % Recommended box constraint
+            Lambda = inf;    % Recommended box constraint
             x = importdata('myspiral.mat');
             y = x(:,3); x = x(:,1:2);
             
