@@ -21,7 +21,7 @@ function F = SVMtrial(x,y,kw,Lambda)
 %% CHOOSE TRAINING SETS
 rng(1)
 
-clc;
+% clc;
 fprintf('Welcome to SVM Trials!\n');
 if nargin == 0
     fprintf('[1] TYPICAL\n');
@@ -31,7 +31,7 @@ if nargin == 0
     fprintf('[5] SPIRAL\n');
     fprintf('[6] IMBALANCED + OVERLAP\n')
     ch = input('Choose dataset: ');             % Let the user choose
-    
+
     switch ch
         case 1
             % Set 1: TYPICAL
@@ -40,7 +40,7 @@ if nargin == 0
             x = [4,5,2,2,4,9,7,8,8,9;
                 7,8,2,5,5,2,1,1,5,4]';
             y = [1 1 1 1 1 -1 -1 -1 -1 -1]';
-            
+
         case 2
             % Set 2: SADDLE
             kw = 1;     % Recommended RBF kernel width
@@ -48,14 +48,14 @@ if nargin == 0
             x = [4,4,2,3,8,9,7,7,5,4,6,5,8,9,6,7;
                 4,6,6,3,2,3,2,0,1,0,1,2,7,8,7,5]';
             y = [1 1 1 1 1 1 1 1 -1 -1 -1 -1 -1 -1 -1 -1]';
-            
+
         case 3
             % Set 3: RANDOM
             kw = 0.1;   % Recommended RBF kernel width
             Lambda = 1;      % Recommended box constraint
             x = 10*rand(50,2);
             y = ones(50,1); y(1:25) = -1;
-            
+
         case 4
             % Set 4: RANDOM, IN ELLIPSE W/ 1 OUTLIER
             kw = 0.25;  % Recommended RBF kernel width
@@ -65,14 +65,14 @@ if nargin == 0
             y(y > 0) = 1; y(y ~= 1) = -1;
 %             outlr = randi(150);
 %             y(outlr) = -y(outlr); % Outlier (this is removable)
-            
+
         case 5
             % Set 5: SPIRAL
             kw = 0.2;   % Recommended RBF kernel width
             Lambda = inf;    % Recommended box constraint
             x = importdata('myspiral.mat');
             y = x(:,3); x = x(:,1:2);
-            
+
         case 6
             % Set 6: IMBALANCED + OVERLAP
             kw = 0.5;   % Recommended RBF kernel width
@@ -84,7 +84,7 @@ if nargin == 0
             Lambda(y == 1) = Cpos; Lambda(y == -1) = Cneg;
             % Remark: Try switching Cpos and Cneg.
     end
-    
+
 end
 
 %% NORMALIZE DATA
@@ -160,7 +160,8 @@ scatter3(xT(y == -1,1),xT(y == -1,2),...        % [-1] data as scatter
 scatter3(xT(y == 1,1),xT(y == 1,2),...          % [+1] data as scatter
     zp(y == 1),'filled');
 
-ch = input('Encircle support vectors? [0/1]: ');
+% ch = input('Encircle support vectors? [0/1]: ');
+ch = 1;
 if ch == 1
     plot3(xT(sv,1),xT(sv,2),zp(sv),'ko','MarkerSize',8);
 end

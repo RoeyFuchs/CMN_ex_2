@@ -45,6 +45,4 @@ function kFolded = kfold(x,y,k)
       m = m+1;
     end
   end
-
-
 end
