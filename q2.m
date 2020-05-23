@@ -7,16 +7,16 @@ y(y > 0) = 1; y(y ~= 1) = -1;
 
 k = 3;
 Data = kfold(x,y,k);
-th = 0.87;
+th = 0;
 for i = 1:k
   acc = 0;
-  tempo = 0;
   F = SVMtrial(Data.train.X(:,:,i),Data.train.Y(i,:)',kw,Lambda);
   sz = size(Data.test.X(:,1,i));
   sz = sz(1);
+  x_for_now = Data.test.X(:,:,i);
+  x_for_now_but_normy = normy(x_for_now, Data.test.Y(i,:));
   for o = 1:sz
-    temp = func(Data.test.X(o,:,i), F.xT,F.y, F.a, F.b, F.kw, F.sv);
-    tempo = tempo + temp;
+    temp = func(x_for_now_but_normy(o,:), F.xT,F.y, F.a, F.b, F.kw, F.sv);
     if temp>th
       y_hat = 1;
     else
@@ -27,7 +27,6 @@ for i = 1:k
     end
   end
   disp(100*acc/sz)
-  %disp(tempo/sz)
 end
 
 %% FUNCTION TO EVALUATE ANY UNSEEN DATA, x
@@ -38,4 +37,13 @@ end
     K = exp(-sum(K.^2,2)/kw);               % RBF: exp(-d^2/kw)
     F = sum(y(sv).*a(sv).*K) + b;           % f(x)
   end
+
+  function x = normy(x,y)
+    N = length(y');                                  % Let N = no. of samples
+    xm = mean(x); xs = std(x);                      % Mean and Std. Dev.
+    temp = x - xm(ones(N,1),:);
+    x = temp./xs(ones(N,1),:);
+  end
+
+
 end
