@@ -7,7 +7,6 @@ y(y > 0) = 1; y(y ~= 1) = -1;
 
 k = 3;
 Data = kfold(x,y,k);
-th = 0;
 for i = 1:k
   acc = 0;
   F = SVMtrial(Data.train.X(:,:,i),Data.train.Y(i,:)',kw,Lambda);
@@ -16,13 +15,8 @@ for i = 1:k
   x_for_now = Data.test.X(:,:,i);
   x_for_now_but_normy = normy(x_for_now, Data.test.Y(i,:));
   for o = 1:sz
-    temp = func(x_for_now_but_normy(o,:), F.xT,F.y, F.a, F.b, F.kw, F.sv);
-    if temp>th
-      y_hat = 1;
-    else
-      y_hat = -1;
-    end
-    if y_hat == Data.test.Y(i,o)
+    fx = sign(func(x_for_now_but_normy(o,:), F.xT,F.y, F.a, F.b, F.kw, F.sv));
+    if (fx * Data.test.Y(i,o)) > 0
       acc = acc +1;
     end
   end
