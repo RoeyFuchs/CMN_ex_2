@@ -9,7 +9,7 @@ vald_y(vald_y > 0) = 1; vald_y(vald_y ~= 1) = -1;
 
 vald_x = normy(vald_x, vald_y);
 
-lambda_value = [0.001 0.01 0.1  1 10  100];
+lambda_value = [0.001 0.01 0.1  1 10  100 1000];
 acc_vec = zeros(size(lambda_value))';
 
 NUM_OF_SMAPLES = 10;

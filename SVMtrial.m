@@ -69,7 +69,7 @@ if nargin == 0
         case 5
             % Set 5: SPIRAL
             kw = 0.2;   % Recommended RBF kernel width
-            Lambda = inf;    % Recommended box constraint
+            Lambda = 0.1;    % Recommended box constraint
             x = importdata('myspiral.mat');
             y = x(:,3); x = x(:,1:2);
 
