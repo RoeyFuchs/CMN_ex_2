@@ -7,6 +7,7 @@ y(y > 0) = 1; y(y ~= 1) = -1;
 
 k = 3;
 Data = kfold(x,y,k);
+acc_k = zeros(k,1);
 for i = 1:k
   acc = 0;
   F = SVMtrial(Data.train.X(:,:,i),Data.train.Y(i,:)',kw,Lambda);
@@ -20,8 +21,11 @@ for i = 1:k
       acc = acc +1;
     end
   end
-  disp(100*acc/sz)
+  acc_k(i,1) = (100*acc/sz);
 end
+acc_k
+disp('mean:')
+mean(acc_k)
 
 %% FUNCTION TO EVALUATE ANY UNSEEN DATA, x
 %  [xT,y,a,b,kw,sv] are fixed after solving the QP.
