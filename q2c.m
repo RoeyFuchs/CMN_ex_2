@@ -37,7 +37,7 @@ acc_vec = acc_vec*100;
 plot(size_vec, acc_vec, '-o')
 title('Accuracy as a function of training set size');
 ylabel('% Accuracy');
-xlabel('Traning set size');
+xlabel('Training set size');
 ylim([0 100])
 
 
