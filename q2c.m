@@ -38,7 +38,7 @@ plot(size_vec, acc_vec, '-o')
 title('Accuracy as a function of training set size');
 ylabel('% Accuracy');
 xlabel('Traning set size');
-
+ylim([0 100])
 
 
 %% FUNCTION TO EVALUATE ANY UNSEEN DATA, x
