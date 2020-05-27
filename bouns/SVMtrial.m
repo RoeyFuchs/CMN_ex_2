@@ -104,10 +104,13 @@ if isscalar(Lambda), Lambda = Lambda*ones(N,1); end            % if C is scalar.
 lb = zeros(N,1);                                % For 0 <= a
 ub = Lambda;                                         % For a <= C
 
+
+parm_a = 0.2;
+parm_b = 0.3;
 for j = 1:N
     for k = 1:j
-        d = x(j,:) - xT(k,:);
-        H(j,k) = y(j)*y(k)*exp(-(d*d')/kw);     % Create kernel matrix
+        d = tanh((x(j,:)* xT(k,:)'));
+        H(j,k) = y(j)*y(k)*d;  % Create kernel matrix
         H(k,j) = H(j,k);                        %  using RBF kernel
     end
 end
@@ -173,8 +176,10 @@ F.a = a; F.b = b; F.y = y;
 %  [xT,y,a,b,kw,sv] are fixed after solving the QP.
 %  f(x) = SUM_{i=sv}(y(i)*a(i)*K(x,xT(i))) + b;
     function F = func(x,xT,y,a,b,kw,sv)
-        K = repmat(x,size(sv)) - xT(sv,:);      % d = (x - x')
-        K = exp(-sum(K.^2,2)/kw);               % RBF: exp(-d^2/kw)
-        F = sum(y(sv).*a(sv).*K) + b;           % f(x)
+        parm_a = 0.2;
+        parm_b = 0.3;
+        K = tanh(repmat(x,size(sv))* xT(sv,:)');
+        % K = tanh(parm_a*K + parm_b);
+        F = sum(y(sv).*a(sv).*K) + b;
     end
 end
