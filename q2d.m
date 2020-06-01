@@ -1,46 +1,50 @@
-function [] = q2c()
+function [] = q2d()
 rng(9)
+
 kw = 0.25;  % Recommended RBF kernel width
+
+lambda_value = [0.005 0.5 5 50 500];
 VALD_SIZE = 50;
-
-vald_x = 10*rand(VALD_SIZE,2);
-vald_y = (vald_x(:,1) - 6).^2 + 3*(vald_x(:,2) - 5).^2 - 8;
-vald_y(vald_y > 0) = 1; vald_y(vald_y ~= 1) = -1;
-
-vald_x = normy(vald_x, vald_y);
-
-lambda_value = [0.001 0.01 0.1  1 10  100 1000];
-acc_vec = zeros(size(lambda_value))';
-
-NUM_OF_SMAPLES = 10;
-
-x = 10*rand(NUM_OF_SMAPLES,2);
+samples_for_train = 10;
+k = 3;
+x = 10*rand(max(VALD_SIZE, samples_for_train)*k,2);
 y = (x(:,1) - 6).^2 + 3*(x(:,2) - 5).^2 - 8;
 y(y > 0) = 1; y(y ~= 1) = -1;
+acc_per_samples = zeros(size(lambda_value))';
+
 
 o = 1;
-for i = lambda_value
-  Lambda = i;
-  F = SVMtrial(x,y,kw,Lambda);
-  acc = 0;
-  for j = 1:VALD_SIZE
-    fx = sign(func(vald_x(j, :), F.xT,F.y, F.a, F.b, F.kw, F.sv));
-    if isnan(fx)
-      fx = sign(rand(1,1)-0.5);
+index = 1;
+Data = kfold(x,y,k);
+for lam = lambda_value
+  Lambda = lam;
+  acc_k = zeros(k,1);
+  for i = 1:k
+    F = SVMtrial(Data.train.X(1:samples_for_train,:,i),Data.train.Y(i,1:samples_for_train)',kw,Lambda);
+    acc = 0;
+    sz = size(Data.test.X(1:VALD_SIZE,1,i));
+    sz = sz(1);
+    x_for_now = Data.test.X(1:VALD_SIZE,:,i);
+    x_for_now_but_normy = normy(x_for_now, Data.test.Y(i,1:VALD_SIZE));
+    for o = 1:sz
+      fx = sign(func(x_for_now_but_normy(o,:), F.xT,F.y, F.a, F.b, F.kw, F.sv));
+      if (fx * Data.test.Y(i,o)) > 0
+        acc = acc +1;
+      end
     end
-    if (fx * vald_y(j,:)) > 0
-      acc = acc +1;
-    end
+    acc_k(i,1) = (acc/sz);
+    o = o+1;
   end
-  acc_vec(o,:) = acc/VALD_SIZE;
-  o = o+1;
+  acc_per_samples(index) = mean(acc_k);
+  index = index+1;
 end
 
-acc_vec = acc_vec*100
-plot(lambda_value, acc_vec, '-o')
+acc_per_samples = acc_per_samples*100;
+plot(lambda_value, acc_per_samples, '-o')
 title('Accuracy as a function of \lambda');
 ylabel('% Accuracy');
 xlabel('\lambda');
+acc_per_samples
 
 
 
